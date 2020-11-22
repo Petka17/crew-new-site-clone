@@ -3,6 +3,7 @@ module Common exposing (..)
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
+import Element.Input as Input
 
 
 logo : Element msg
@@ -41,3 +42,8 @@ checkboxIcon isChecked =
             ]
         <|
             none
+
+
+fieldPlaceholder : String -> Maybe (Input.Placeholder msg)
+fieldPlaceholder str =
+    Just <| Input.placeholder [] <| text str

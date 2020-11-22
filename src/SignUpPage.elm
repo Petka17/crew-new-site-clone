@@ -2,7 +2,7 @@ module SignUpPage exposing (Model, Msg, init, update, view)
 
 import Browser.Navigation as Nav
 import Colors exposing (..)
-import Common exposing (checkboxIcon)
+import Common exposing (checkboxIcon, fieldPlaceholder)
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -232,8 +232,3 @@ formField labelText field =
             [ text labelText ]
         , el [ width (fillPortion 1) ] field
         ]
-
-
-fieldPlaceholder : String -> Maybe (Input.Placeholder msg)
-fieldPlaceholder str =
-    Just <| Input.placeholder [] <| text str

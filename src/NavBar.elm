@@ -21,11 +21,11 @@ navBar =
         [ el [ alignLeft ] logo
         , el [ alignRight ] <|
             row [ spacing 20 ]
-                [ text "Home"
+                [ link [] { label = text "Home", url = "https://crewnew.com" }
                 , bar
-                , text "About Us"
+                , link [] { label = text "About Us", url = "https://crewnew.com/about" }
                 , bar
-                , text "Contact"
+                , link [] { label = text "Contact", url = "https://crewnew.com/contact" }
                 ]
         ]
 

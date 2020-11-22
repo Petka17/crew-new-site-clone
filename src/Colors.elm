@@ -11,3 +11,18 @@ purple =
 white : Color
 white =
     rgb255 255 255 255
+
+
+grey : Color
+grey =
+    rgb255 186 189 182
+
+
+lightGrey : Color
+lightGrey =
+    rgb255 240 240 240
+
+
+blue : Color
+blue =
+    rgb255 50 115 220

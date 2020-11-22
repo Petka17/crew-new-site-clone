@@ -1,18 +1,33 @@
-# Crew New site clone
+# CrewNew Site Clone
 
-# TODO:
+## How to run
 
-1. Finish layouting
+Development:
 
-- Form Button
+```
+elm-live src/Main.elm -p 8888 -H -s index.html -u -- --debug --output=elm.js
+```
 
-1. Form validation
-1. Client routing
-1. Http requests
+Testing:
+
+```
+elm-live src/Main.elm -p 8888 -s index.html -u -- --output=elm.js
+```
+
+## TODO:
+
+1. Skills Page
+
+- Table
+- Custom Dropdown
+- Custom Dropdown with search
+
+2. Form validation
+3. Http requests
 
 - get country list
-- submit form
+- get skills
+- send data
 
-1. Dropdown for country
-1. Responsive UI (get window size through subscriptions)
-1. Authentication
+4. Authentication
+5. Responsive UI (get window size through subscriptions)

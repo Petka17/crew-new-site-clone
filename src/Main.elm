@@ -129,7 +129,7 @@ view model =
                 [ navBar
                 , column [ width fill, height fill, scrollbarY, spacing 40 ]
                     [ column
-                        [ width <| maximum 900 fill
+                        [ width <| maximum 950 fill
                         , paddingXY 20 0
                         , centerX
                         ]

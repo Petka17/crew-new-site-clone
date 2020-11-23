@@ -220,7 +220,7 @@ form (Model model) =
 
 formFields : Model -> Element Msg
 formFields (Model model) =
-    column [ width (maximum 600 fill) ]
+    column [ width (maximum 600 fill), spacing 5 ]
         [ formField "Hourly rate (USD) for a smaller project: *" <|
             Input.text [ Font.size 14, width (px 100) ]
                 { label = Input.labelRight [] <| text "(eg. 15.2)"

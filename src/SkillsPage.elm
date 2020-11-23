@@ -8,7 +8,9 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import Option exposing (Option)
 import Page
+import Select
 
 
 type Model
@@ -20,14 +22,17 @@ type Model
 
 type alias Skill =
     { name : String
-    , level : String
-    , experience : String
+    , level : Maybe Option
+    , experience : Maybe Option
     , comments : String
     }
 
 
 type Msg
-    = UpdatedComment Int String
+    = UpdatedSkill Int String
+    | UpdatedLevel Int (Maybe Option)
+    | UpdatedExperience Int (Maybe Option)
+    | UpdatedComment Int String
     | ButtonClicked
 
 
@@ -42,15 +47,62 @@ init navKey =
 initSkill : Skill
 initSkill =
     { name = ""
-    , level = "6 - Midlevel"
-    , experience = "<1 year"
+    , level = takeAt 5 levelOptions
+    , experience = List.head experienceOptions
     , comments = ""
     }
+
+
+takeAt : Int -> List a -> Maybe a
+takeAt index list =
+    list |> List.take (index + 1) |> List.drop index |> List.head
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
     case msg of
+        UpdatedSkill selectedIndex name ->
+            let
+                updateSkillName index skill =
+                    if index == selectedIndex then
+                        { skill | name = name }
+
+                    else
+                        skill
+
+                skills =
+                    List.indexedMap updateSkillName model.skills
+            in
+            ( Model { model | skills = skills }, Cmd.none )
+
+        UpdatedLevel selectedIndex level ->
+            let
+                updateLevel index skill =
+                    if index == selectedIndex then
+                        { skill | level = level }
+
+                    else
+                        skill
+
+                skills =
+                    List.indexedMap updateLevel model.skills
+            in
+            ( Model { model | skills = skills }, Cmd.none )
+
+        UpdatedExperience selectedIndex experience ->
+            let
+                updateExperience index skill =
+                    if index == selectedIndex then
+                        { skill | experience = experience }
+
+                    else
+                        skill
+
+                skills =
+                    List.indexedMap updateExperience model.skills
+            in
+            ( Model { model | skills = skills }, Cmd.none )
+
         UpdatedComment selectedIndex comments ->
             let
                 updateComment index skill =
@@ -107,13 +159,13 @@ form model =
 skillsTable : Model -> Element Msg
 skillsTable (Model { skills }) =
     column [ width fill, spacing 20 ] <|
-        List.append [ tableHeader ] <|
-            List.indexedMap tableRow skills
+        tableHeader
+            :: List.indexedMap tableRow skills
 
 
 tableHeader : Element msg
 tableHeader =
-    row [ width fill, Font.bold, Font.size 15 ]
+    row [ width fill, Font.bold, Font.size 15, spacing 5 ]
         [ el [ countWidth ] <| text "#"
         , el [ skillWidth ] <| text "Skill"
         , el [ levelWidth ] <| text "Level"
@@ -124,14 +176,19 @@ tableHeader =
 
 tableRow : Int -> Skill -> Element Msg
 tableRow index skill =
-    row [ width fill, Font.size 16 ]
+    row [ width fill, Font.size 16, spacing 5 ]
         [ el [ countWidth ] <| text (indexToString index)
         , el [ skillWidth ] <|
-            text skill.name
+            Input.text []
+                { label = Input.labelHidden ""
+                , placeholder = fieldPlaceholder "Select Skill"
+                , text = skill.name
+                , onChange = UpdatedSkill index
+                }
         , el [ levelWidth ] <|
-            text skill.level
+            Select.view levelOptions skill.level (UpdatedLevel index)
         , el [ experienceWidth ] <|
-            text "Experience"
+            Select.view experienceOptions skill.experience (UpdatedExperience index)
         , el [ commentsWidth ] <|
             Input.multiline [ height (px 60) ]
                 { label = Input.labelHidden ""
@@ -156,6 +213,10 @@ indexToString index =
         strIndex
 
 
+
+-- WIDTH
+
+
 countWidth : Attribute msg
 countWidth =
     width (fillPortion 1)
@@ -163,12 +224,12 @@ countWidth =
 
 skillWidth : Attribute msg
 skillWidth =
-    width (fillPortion 5)
+    width (fillPortion 6)
 
 
 levelWidth : Attribute msg
 levelWidth =
-    width (fillPortion 2)
+    width (fillPortion 4)
 
 
 experienceWidth : Attribute msg
@@ -179,3 +240,41 @@ experienceWidth =
 commentsWidth : Attribute msg
 commentsWidth =
     width (fillPortion 12)
+
+
+
+-- OPTIONS
+
+
+experienceOptions : List Option
+experienceOptions =
+    [ { id = "0.5", value = "<1 year" }
+    , { id = "1", value = "1 year" }
+    , { id = "1.5", value = "1,5 years" }
+    , { id = "2", value = "2 years" }
+    , { id = "3", value = "3 years" }
+    , { id = "4", value = "4 years" }
+    , { id = "5", value = "5 years" }
+    , { id = "7.5", value = "7-8 years" }
+    , { id = "9.5", value = "9-10 years" }
+    , { id = "13", value = "11-15 years" }
+    , { id = "17.5", value = "16-19 years" }
+    , { id = "22", value = "20-24 years" }
+    , { id = "27", value = "25-29 years" }
+    , { id = "31", value = "30+ years" }
+    ]
+
+
+levelOptions : List Option
+levelOptions =
+    [ { id = "1", value = "1 - Started" }
+    , { id = "2", value = "2 - Minimal" }
+    , { id = "3", value = "3 - Little" }
+    , { id = "4", value = "4 - Junior" }
+    , { id = "5", value = "5 - Junior/Mid" }
+    , { id = "6", value = "6 - Midlevel" }
+    , { id = "7", value = "7 - Mid/Senior" }
+    , { id = "8", value = "8 - Senior" }
+    , { id = "9", value = "9 - Senior Expert" }
+    , { id = "10", value = "10 - Top Expert" }
+    ]

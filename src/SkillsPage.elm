@@ -22,7 +22,7 @@ type Model
 
 
 type alias Skill =
-    { name : String
+    { name : SelectWithFilter.State
     , level : Maybe Option
     , experience : Maybe Option
     , comments : String
@@ -30,7 +30,7 @@ type alias Skill =
 
 
 type Msg
-    = UpdatedSkill Int String
+    = UpdatedSkill Int SelectWithFilter.Msg
     | UpdatedLevel Int (Maybe Option)
     | UpdatedExperience Int (Maybe Option)
     | UpdatedComment Int String
@@ -47,7 +47,7 @@ init navKey =
 
 initSkill : Skill
 initSkill =
-    { name = ""
+    { name = SelectWithFilter.init Nothing "Select Skill"
     , level = takeAt 5 levelOptions
     , experience = List.head experienceOptions
     , comments = ""
@@ -62,11 +62,11 @@ takeAt index list =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg (Model model) =
     case msg of
-        UpdatedSkill selectedIndex name ->
+        UpdatedSkill selectedIndex subMsg ->
             let
                 updateSkillName index skill =
                     if index == selectedIndex then
-                        { skill | name = name }
+                        { skill | name = SelectWithFilter.update subMsg skill.name }
 
                     else
                         skill
@@ -180,12 +180,9 @@ tableRow index skill =
     row [ width fill, Font.size 16, spacing 5 ]
         [ el [ countWidth ] <| text (indexToString index)
         , el [ skillWidth ] <|
-            Input.text []
-                { label = Input.labelHidden ""
-                , placeholder = fieldPlaceholder "Select Skill"
-                , text = skill.name
-                , onChange = UpdatedSkill index
-                }
+            (SelectWithFilter.view [ Font.size 14 ] skillsOptions skill.name
+                |> Element.map (UpdatedSkill index)
+            )
         , el [ levelWidth ] <|
             Select.view levelOptions skill.level (UpdatedLevel index)
         , el [ experienceWidth ] <|
@@ -283,12 +280,104 @@ levelOptions =
 
 skillsOptions : List Option
 skillsOptions =
-    [ { id = "", value = "" }
-    , { id = "", value = "" }
-    , { id = "", value = "" }
-    , { id = "", value = "" }
-    , { id = "", value = "" }
-    , { id = "", value = "" }
-    , { id = "", value = "" }
-    , { id = "", value = "" }
+    [ { id = "Google Analytics", value = "Google Analytics" }
+    , { id = "Google Tag Manager", value = "Google Tag Manager" }
+    , { id = "Data Science", value = "Data Science" }
+    , { id = "Search Engine Optimisation (SEO)", value = "Search Engine Optimisation (SEO)" }
+    , { id = "PHP", value = "PHP" }
+    , { id = "CSS", value = "CSS" }
+    , { id = "jQuery", value = "jQuery" }
+    , { id = "HTML", value = "HTML" }
+    , { id = "MySQL", value = "MySQL" }
+    , { id = "Bootstrap", value = "Bootstrap" }
+    , { id = "Codeigniter", value = "Codeigniter" }
+    , { id = "Web Development", value = "Web Development" }
+    , { id = "WordPress", value = "WordPress" }
+    , { id = "PSD to HTML", value = "PSD to HTML" }
+    , { id = "Data entry", value = "Data entry" }
+    , { id = "HTML5", value = "HTML5" }
+    , { id = "JavaScript", value = "JavaScript" }
+    , { id = "CSS3", value = "CSS3" }
+    , { id = "Photoshop", value = "Photoshop" }
+    , { id = "Photo Editing / Manipulation", value = "Photo Editing / Manipulation" }
+    , { id = "Graphic design", value = "Graphic design" }
+    , { id = "Logo design", value = "Logo design" }
+    , { id = "Web design", value = "Web design" }
+    , { id = "CakePHP", value = "CakePHP" }
+    , { id = "Angular.js", value = "Angular.js" }
+    , { id = "MongoDB", value = "MongoDB" }
+    , { id = "Laravel", value = "Laravel" }
+    , { id = "Node.js", value = "Node.js" }
+    , { id = "Magento", value = "Magento" }
+    , { id = "OpenCart", value = "OpenCart" }
+    , { id = "Joomla!", value = "Joomla!" }
+    , { id = "Moodle", value = "Moodle" }
+    , { id = "Drupal", value = "Drupal" }
+    , { id = "SugarCRM", value = "SugarCRM" }
+    , { id = "Illustrations", value = "Illustrations" }
+    , { id = "Android App Development", value = "Android App Development" }
+    , { id = "iOS Development", value = "iOS Development" }
+    , { id = "Illustrator", value = "Illustrator" }
+    , { id = "Corel Draw", value = "Corel Draw" }
+    , { id = "Sketch", value = "Sketch" }
+    , { id = "Social media marketing (SMM)", value = "Social media marketing (SMM)" }
+    , { id = "Internet Marketing", value = "Internet Marketing" }
+    , { id = "Java", value = "Java" }
+    , { id = "JSP", value = "JSP" }
+    , { id = "JSON", value = "JSON" }
+    , { id = "Express", value = "Express" }
+    , { id = "Docker", value = "Docker" }
+    , { id = "PostgreSQL", value = "PostgreSQL" }
+    , { id = "Dojo", value = "Dojo" }
+    , { id = "WordPress Plugin", value = "WordPress Plugin" }
+    , { id = "HTML &amp; CSS", value = "HTML &amp; CSS" }
+    , { id = "Yii", value = "Yii" }
+    , { id = "Flyer / Brochure / etc Design", value = "Flyer / Brochure / etc Design" }
+    , { id = "MODx", value = "MODx" }
+    , { id = "Photography", value = "Photography" }
+    , { id = "Video Production", value = "Video Production" }
+    , { id = "Video Editing", value = "Video Editing" }
+    , { id = "Camera Operator", value = "Camera Operator" }
+    , { id = "Adobe Premiere", value = "Adobe Premiere" }
+    , { id = "Project Management", value = "Project Management" }
+    , { id = "Project Management Soft", value = "Project Management Soft" }
+    , { id = "Copywriting", value = "Copywriting" }
+    , { id = "Pay Per Click (PPC)", value = "Pay Per Click (PPC)" }
+    , { id = "Python", value = "Python" }
+    , { id = "KeystoneJS", value = "KeystoneJS" }
+    , { id = "Django", value = "Django" }
+    , { id = "Chamilo", value = "Chamilo" }
+    , { id = "Odoo", value = "Odoo" }
+    , { id = "Art direction", value = "Art direction" }
+    , { id = "Market / Customer Research", value = "Market / Customer Research" }
+    , { id = "Marketing Strategy", value = "Marketing Strategy" }
+    , { id = "Business development", value = "Business development" }
+    , { id = "Project planning", value = "Project planning" }
+    , { id = "SQL", value = "SQL" }
+    , { id = "phpMyAdmin", value = "phpMyAdmin" }
+    , { id = "Mautic", value = "Mautic" }
+    , { id = "Twilio", value = "Twilio" }
+    , { id = "Text editing", value = "Text editing" }
+    , { id = "SEO Writing", value = "SEO Writing" }
+    , { id = "English - Estonian translation", value = "English - Estonian translation" }
+    , { id = "xCart", value = "xCart" }
+    , { id = "Ethereum", value = "Ethereum" }
+    , { id = "HubSpot", value = "HubSpot" }
+    , { id = "Sharpspring", value = "Sharpspring" }
+    , { id = "Sales", value = "Sales" }
+    , { id = "Git", value = "Git" }
+    , { id = "Jira", value = "Jira" }
+    , { id = "C", value = "C" }
+    , { id = "C++", value = "C++" }
+    , { id = "Cryptography / Security", value = "Cryptography / Security" }
+    , { id = "Open SSL", value = "Open SSL" }
+    , { id = "OpenSC", value = "OpenSC" }
+    , { id = "Linux development", value = "Linux development" }
+    , { id = "PKCS#11", value = "PKCS#11" }
+    , { id = "GnuTLS", value = "GnuTLS" }
+    , { id = "PGP", value = "PGP" }
+    , { id = "GnuPG", value = "GnuPG" }
+    , { id = "X.509", value = "X.509" }
+    , { id = "Software testing", value = "Software testing" }
+    , { id = "ERP / CRM", value = "ERP / CRM" }
     ]

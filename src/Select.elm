@@ -4,7 +4,6 @@ import Element exposing (Element)
 import Html exposing (..)
 import Html.Attributes exposing (selected, style, value)
 import Html.Events exposing (onInput, targetValue)
-import Json.Decode as Json
 import Option exposing (Option)
 
 

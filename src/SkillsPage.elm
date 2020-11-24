@@ -11,6 +11,7 @@ import Element.Input as Input
 import Option exposing (Option)
 import Page
 import Select
+import SelectWithFilter
 
 
 type Model
@@ -277,4 +278,17 @@ levelOptions =
     , { id = "8", value = "8 - Senior" }
     , { id = "9", value = "9 - Senior Expert" }
     , { id = "10", value = "10 - Top Expert" }
+    ]
+
+
+skillsOptions : List Option
+skillsOptions =
+    [ { id = "", value = "" }
+    , { id = "", value = "" }
+    , { id = "", value = "" }
+    , { id = "", value = "" }
+    , { id = "", value = "" }
+    , { id = "", value = "" }
+    , { id = "", value = "" }
+    , { id = "", value = "" }
     ]
